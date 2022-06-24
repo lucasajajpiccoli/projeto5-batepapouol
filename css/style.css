@@ -1,3 +1,140 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
+* {
+    box-sizing: border-box;
+}
 
+body {
+    background-color: #F3F3F3;
+}
+
+.top {
+    width: 100vw;
+    height: 80px;
+    background-color: #FFFFFF;
+    box-shadow: 0px 4px 6px rgba(0, 0 , 0, 0.05);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top img {
+    margin-left: 21px;
+}
+
+.top ion-icon {
+    font-size: 45px;
+    margin-right: 21px;
+}
+
+.messageslist {
+    margin-top: 106px;
+    width: 100vw;
+}
+
+.messageslist div {
+    width: 100vw;
+    border-radius: 2px;
+    margin: 4px 0;
+    padding: 12px 9px;
+}
+
+.statusmessage {
+    background-color: #DCDCDC;
+}
+
+.publicmessage {
+    background-color: #FFFFFF;
+}
+
+.privatemessage {
+    background-color: #FFDEDE;
+}
+
+.messageslist span {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+}
+
+.statusmessage,
+.publicmessage {
+    line-height: 16px;
+}
+
+.privatemessage {
+    line-height: 20px;
+}
+
+.statusmessage span:first-child,
+.publicmessage span:first-child,
+.privatemessage span:first-child {
+    font-weight: 400;
+    color: #AAAAAA;
+}
+
+.statusmessage span:nth-child(2),
+.publicmessage span:nth-child(2),
+.privatemessage span:nth-child(2) {
+    font-weight: 700;
+}
+
+.statusmessage span:nth-child(3),
+.publicmessage span:nth-child(3),
+.privatemessage span:nth-child(3) {
+    font-weight: 400;
+}
+
+.publicmessage span:nth-child(4),
+.privatemessage span:nth-child(4) {
+    font-weight: 700;
+}
+
+.publicmessage span:nth-child(5),
+.privatemessage span:nth-child(5) {
+    font-weight: 400;
+}
+
+
+.userinteraction {
+    width: 100vw;
+    height: 80px;
+    background-color: #FFFFFF;
+    box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inputbox {
+    width: calc(100vw - 80px);
+    margin-left: 18px;
+}
+
+.inputbox textarea {
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21px;
+    color: #000000;
+}
+
+.inputbox textarea::placeholder {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 18px;
+    line-height: 21px;
+    color: #000000;
+}
+
+.userinteraction ion-icon {
+    font-size: 26px;
+    margin-right: 18px;
+}
