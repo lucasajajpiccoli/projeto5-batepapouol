@@ -31,7 +31,7 @@ body {
 }
 
 .messageslist {
-    margin-top: 106px;
+    margin: 106px 0px;
     width: 100vw;
 }
 
@@ -113,7 +113,8 @@ body {
 
 .inputbox {
     width: calc(100vw - 80px);
-    margin-left: 18px;
+    margin-left:18px;
+
 }
 
 .inputbox textarea {
@@ -123,6 +124,9 @@ body {
     font-size: 18px;
     line-height: 21px;
     color: #000000;
+    border: none;
+    outline: none;
+    resize: none;
 }
 
 .inputbox textarea::placeholder {
@@ -132,6 +136,7 @@ body {
     font-size: 18px;
     line-height: 21px;
     color: #000000;
+    padding-top: 12px;
 }
 
 .userinteraction ion-icon {
