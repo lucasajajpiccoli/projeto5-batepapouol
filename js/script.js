@@ -33,26 +33,34 @@ function enterRoom() {
 
 }
 
-function enterNewName() {
+function enterNewName(badResponse) {
 
-    userNameObject.name = prompt(`O nome "${userNameObject.name}" já está em uso. Por favor, insira outro nome.`);
+    if (badResponse.response.status === 400) {
 
-    userNamePromise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", userNameObject);
+        userNameObject.name = prompt(`O nome "${userNameObject.name}" já está em uso. Por favor, insira outro nome.`);
 
-    userNamePromise.catch(enterNewName);
-    userNamePromise.then(workChat);
+        userNamePromise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", userNameObject);
+    
+        userNamePromise.catch(enterNewName);
+        userNamePromise.then(workChat);
+
+    }
 
 }
 
-function workChat() {
+function workChat(goodResponse) {
 
-    sendButton.setAttribute("onClick", "sendMessage();");
+    if (goodResponse.status === 200) {
 
-    getMessages();
-    setInterval(getMessages, 3000);
+        sendButton.setAttribute("onClick", "sendMessage();");
 
-    beStillOnline();
-    setInterval(beStillOnline, 5000);
+        getMessages();
+        setInterval(getMessages, 3000);
+    
+        beStillOnline();
+        setInterval(beStillOnline, 5000);
+
+    }
 
 }
 
