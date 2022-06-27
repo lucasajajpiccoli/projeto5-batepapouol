@@ -1,18 +1,77 @@
-let messagesListBox = document.querySelector(".messageslist")
+let messagesListBox = document.querySelector(".messageslist");
 
-getMessages();
-setInterval(getMessages, 3000);
+let theLastObject = {
+
+    from: "",
+    to: "",
+    text: "",
+    type: "",
+    time: ""
+
+};
+
+let userNameObject = {
+
+    name: ""
+
+};
+
+let userNamePromise;
+
+let messagesPromise;
+
+function enterRoom() {
+
+    userNameObject.name = prompt("Qual é o seu nome?");
+
+    userNamePromise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", userNameObject);
+
+    userNamePromise.catch(enterNewName);
+    userNamePromise.then(workChat);
+
+}
+
+function enterNewName() {
+
+    userNameObject.name = prompt(`O nome "${userNameObject.name}" já está em uso. Por favor, insira outro nome.`);
+
+    userNamePromise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", userNameObject);
+
+    userNamePromise.catch(enterNewName);
+    userNamePromise.then(workChat);
+
+
+}
+
+function workChat() {
+
+    getMessages();
+    setInterval(getMessages, 3000);
+    
+    beStillOnline();
+    setInterval(beStillOnline, 5000);
+
+}
+
+function beStillOnline() {
+
+    const stillOnline = axios.post("https://mock-api.driven.com.br/api/v6/uol/status", userNameObject);
+
+}
 
 function getMessages() {
 
-    const messagesPromise = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");
+    messagesPromise = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");
+
     messagesPromise.then(renderMessages);
+    messagesPromise.catch(getMessages);
 
 }
 
 function renderMessages(getResponse) {
 
     const messagesObjects = getResponse.data;
+    let messagesRendered = [];
     let counter = 1;
 
     messagesListBox.innerHTML = "";
@@ -21,9 +80,11 @@ function renderMessages(getResponse) {
 
         if (messagesObjects[i].type === "status") {
 
+            messagesRendered.push(messagesObjects[i]);
+
             messagesListBox.innerHTML += `
                 
-                <div class="statusmessage a${i}">
+                <div class="statusmessage a${i+1-counter}">
                     <span>(${messagesObjects[i].time}) </span>
                     <span>${messagesObjects[i].from} </span>
                     <span>${messagesObjects[i].text}</span>
@@ -31,9 +92,11 @@ function renderMessages(getResponse) {
                 `
         } else if (messagesObjects[i].type === "message") {
 
+            messagesRendered.push(messagesObjects[i]);
+
             messagesListBox.innerHTML += `
 
-                <div class="publicmessage a${i}">
+                <div class="publicmessage a${i+1-counter}">
                     <span>(${messagesObjects[i].time}) </span>
                     <span>${messagesObjects[i].from} </span>
                     <span>para </span>
@@ -41,11 +104,13 @@ function renderMessages(getResponse) {
                     <span>${messagesObjects[i].text}</span>
                 </div>
                 `
-        } else if (messagesObjects[i].type === "private_message") {
+        } else if (messagesObjects[i].type === "private_message" && (userNameObject.name === messagesObjects[i].from || userNameObject.name === messagesObjects[i].to)) {
+
+            messagesRendered.push(messagesObjects[i]);
 
             messagesListBox.innerHTML += `
 
-                <div class="privatemessage a${i}">
+                <div class="privatemessage a${i+1-counter}">
                     <span>(${messagesObjects[i].time}) </span>
                     <span>${messagesObjects[i].from} </span>
                     <span>reservadamente para </span>
@@ -61,9 +126,27 @@ function renderMessages(getResponse) {
 
     }
 
-    const actualSize = messagesObjects.length;
-    const theLastElement = document.querySelector(`.a${actualSize-counter}`);
-    theLastElement.scrollIntoView();
+    if (!equalObjects(theLastObject, messagesRendered[messagesRendered.length-1])) {
+
+        const theLastElement = document.querySelector(`.a${messagesRendered.length-1}`);
+        theLastElement.scrollIntoView();
+        theLastObject = messagesRendered[messagesRendered.length-1];
+        console.log("diferente");
+
+    }
 
 }
 
+function equalObjects(theLast1, theLast2) {
+
+    const a = theLast1.from === theLast2.from;
+    const b = theLast1.to === theLast2.to;
+    const c = theLast1.text === theLast2.text;
+    const d = theLast1.type === theLast2.type;
+    const e = theLast1.time === theLast2.time;
+
+    return a && b && c && d && e;
+
+}
+
+enterRoom();
