@@ -1,5 +1,7 @@
 let messagesListBox = document.querySelector(".messageslist");
 
+let sendButton = document.querySelector(".userinteraction ion-icon");
+
 let theLastObject = {
 
     from: "",
@@ -40,14 +42,15 @@ function enterNewName() {
     userNamePromise.catch(enterNewName);
     userNamePromise.then(workChat);
 
-
 }
 
 function workChat() {
 
+    sendButton.setAttribute("onClick", "sendMessage();");
+
     getMessages();
     setInterval(getMessages, 3000);
-    
+
     beStillOnline();
     setInterval(beStillOnline, 5000);
 
@@ -63,8 +66,8 @@ function getMessages() {
 
     messagesPromise = axios.get("https://mock-api.driven.com.br/api/v6/uol/messages");
 
-    messagesPromise.then(renderMessages);
     messagesPromise.catch(getMessages);
+    messagesPromise.then(renderMessages);
 
 }
 
@@ -84,7 +87,7 @@ function renderMessages(getResponse) {
 
             messagesListBox.innerHTML += `
                 
-                <div class="statusmessage a${i+1-counter}">
+                <div class="statusmessage a${i + 1 - counter}">
                     <span>(${messagesObjects[i].time}) </span>
                     <span>${messagesObjects[i].from} </span>
                     <span>${messagesObjects[i].text}</span>
@@ -96,7 +99,7 @@ function renderMessages(getResponse) {
 
             messagesListBox.innerHTML += `
 
-                <div class="publicmessage a${i+1-counter}">
+                <div class="publicmessage a${i + 1 - counter}">
                     <span>(${messagesObjects[i].time}) </span>
                     <span>${messagesObjects[i].from} </span>
                     <span>para </span>
@@ -110,7 +113,7 @@ function renderMessages(getResponse) {
 
             messagesListBox.innerHTML += `
 
-                <div class="privatemessage a${i+1-counter}">
+                <div class="privatemessage a${i + 1 - counter}">
                     <span>(${messagesObjects[i].time}) </span>
                     <span>${messagesObjects[i].from} </span>
                     <span>reservadamente para </span>
@@ -126,11 +129,11 @@ function renderMessages(getResponse) {
 
     }
 
-    if (!equalObjects(theLastObject, messagesRendered[messagesRendered.length-1])) {
+    if (!equalObjects(theLastObject, messagesRendered[messagesRendered.length - 1])) {
 
-        const theLastElement = document.querySelector(`.a${messagesRendered.length-1}`);
+        const theLastElement = document.querySelector(`.a${messagesRendered.length - 1}`);
         theLastElement.scrollIntoView();
-        theLastObject = messagesRendered[messagesRendered.length-1];
+        theLastObject = messagesRendered[messagesRendered.length - 1];
         console.log("diferente");
 
     }
@@ -146,6 +149,38 @@ function equalObjects(theLast1, theLast2) {
     const e = theLast1.time === theLast2.time;
 
     return a && b && c && d && e;
+
+}
+
+function sendMessage() {
+
+    const messageText = document.querySelector(".inputbox textarea").value;
+
+    if (messageText !== "") {
+
+        document.querySelector(".inputbox textarea").value = "";
+
+        const objectToSend = {
+
+            from: userNameObject.name,
+            to: "Todos",
+            text: messageText,
+            type: "message"
+
+        };
+
+        const sendPromise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", objectToSend);
+
+        sendPromise.catch(reloadPage);
+        sendPromise.then(getMessages);
+
+    }
+
+}
+
+function reloadPage() {
+
+    window.location.reload();
 
 }
 
